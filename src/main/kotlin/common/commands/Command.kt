@@ -6,5 +6,5 @@ interface Command {
     val name: String
     val description: String
 
-    fun execution(args: List <String>)
+    fun execute(request: Request): Response
 }

@@ -22,13 +22,11 @@ class CommandManager {
      * @param args аргументы команды
      * @return true если команда найдена и выполнена, иначе false
      */
-    fun execution (name: String, args: List<String>): Boolean {
-        val command = commands[name]
-        if (command == null) {
-            return false
-        }
-        command.execution(args)
-        return true
+    fun execute(request: Request): Response {
+        val command = commands[request.commandName]
+            ?: return Response("Команда не найдена")
+
+        return command.execute(request)
     }
     /**
      * Возвращает список всех команд.
