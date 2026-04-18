@@ -1,6 +1,8 @@
 package collection
 
 import commands.Command
+import common.Request
+import common.Response
 
 /**
  * Класс для управления командами.
@@ -16,14 +18,14 @@ class CommandManager {
         commands[command.name] = command
     }
     /**
-     * Выполняет команду по имени.
+     * Выполняет команду по запросу.
      *
-     * @param name имя команды
-     * @param args аргументы команды
-     * @return true если команда найдена и выполнена, иначе false
+     * @param request запрос от клиента
+     * @return результат выполнения команды
      */
     fun execute(request: Request): Response {
-        val command = commands[request.commandName]
+        val comma
+        nd = commands[request.commandName]
             ?: return Response("Команда не найдена")
 
         return command.execute(request)

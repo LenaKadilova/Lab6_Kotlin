@@ -1,6 +1,9 @@
 package commands
 
 import collection.CollectionManager
+import common.Request
+import common.Response
+
 /**
  * Команда удаления элементов.
  * Удаляет все элементы, превышающие заданный.
@@ -10,9 +13,20 @@ class RemoveGreaterCommand(private val collectionManager: CollectionManager) : C
     override val name = "remove_greater"
     override val description = "удалить из коллекции элементы больше заданного"
 
-    override fun execution(args: List<String>) {
+    override fun execute(request: Request): Response {
 
-        collectionManager.removeGreater()
+        val args = request.argument?.split(" ") ?: emptyList()
 
+        if (args.size < 2) {
+            return Response("Укажите параметр и значение")
+        }
+
+        val param = args[0]
+        val value = args[1].toDoubleOrNull()
+            ?: return Response("Значение должно быть числом")
+
+        val result = collectionManager.removeGreater(param, value)
+
+        return Response(result)
     }
 }

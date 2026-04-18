@@ -30,15 +30,18 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
     /**
      * Выводит все элементы коллекции.
      */
-    fun ShowAll() {
+    fun ShowAll(): List<String> {
         if (storage.isEmpty()) {
-            io.println("Коллекция пустая")
-            return
+            return listOf("Коллекция пустая")
         }
+
+        val result = mutableListOf<String>()
+
         for (entry in storage.entries) {
-            io.println("Ключ = ${entry.key}")
-            io.println("Значение = ${entry.value}")
+            result.add("Ключ = ${entry.key}")
+            result.add("Значение = ${entry.value}")
         }
+        return result
     }
 
     fun clear() {
@@ -48,86 +51,59 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
      * Удаляет элемент по заданному ключу.
      * @param key ключ элемента
      */
-    fun removeByKey(key: Long) {
-        if (storage.containsKey(key)) {
+    fun removeByKey(key: Long): String {
+        return if (storage.containsKey(key)) {
             storage.remove(key)
-            io.println("Элемент удалён")
+            "Элемент удалён"
         } else {
-            io.println("Ключ не найден")
+            "Ключ не найден"
         }
     }
     /**
      * Выводит элементы коллекции, отсортированные по выбранному параметру.
      */
-    fun printAscending() {
+    fun printAscending(param: String): List<String> {
         if (storage.isEmpty()) {
-            io.println("Элементы не найдены")
-            return
+            return listOf("Элементы не найдены")
         }
 
-        io.println("По какому параметру сортировать (id, x, y, creationDate, age, weight, eyesCount, toothCount)?")
-        val param = io.readLine()
-        var sortedList = storage.values.toList()
+        val sortedList = when (param) {
+            "id" -> storage.values.sortedBy { it.id }
+            "x" -> storage.values.sortedBy { it.coordinates.x }
+            "y" -> storage.values.sortedBy { it.coordinates.y }
+            "creationDate" -> storage.values.sortedBy { it.creationDate }
+            "age" -> storage.values.sortedBy { it.age }
+            "weight" -> storage.values.sortedBy { it.weight }
+            "eyesCount" -> storage.values.sortedBy { it.head?.eyesCount }
+            "toothCount" -> storage.values.sortedBy { it.head?.toothCount }
+            else -> return listOf("Неверный параметр")
+        }
 
-        when (param) {
-            "id" -> {
-                sortedList = storage.values.sortedBy { it.id }
-            }
-            "x" -> {
-                sortedList = storage.values.sortedBy { it.coordinates.x }
-            }
-            "y" -> {
-                sortedList = storage.values.sortedBy { it.coordinates.y }
-            }
-            "creationDate" -> {
-                sortedList = storage.values.sortedBy { it.creationDate }
-            }
-            "age" -> {
-                sortedList = storage.values.sortedBy { it.age }
-            }
-            "weight" -> {
-                sortedList = storage.values.sortedBy { it.weight }
-            }
-            "eyesCount" -> {
-                sortedList = storage.values.sortedBy { it.head?.eyesCount }
-            }
-            "toothCount" -> {
-                sortedList = storage.values.sortedBy { it.head?.toothCount }
-            }
-            else -> {
-                io.println("Неверный параметр")
-                return
-            }
-        }
-        for (dragon in sortedList) {
-            io.println(dragon.toString())
-        }
+        return sortedList.map { it.toString() }
     }
     /**
      * Фильтрует элементы по префиксу имени.
      * @param prefix начало имени
      */
-    fun filterStartsWithName(prefix: String) {
+    fun filterStartsWithName(prefix: String): List<String> {
         val filtered = storage.values.filter { it.name.startsWith(prefix) }
 
-        if (filtered.isEmpty()) {
-            io.println("Элементы не найдены")
+        return if (filtered.isEmpty()) {
+            listOf("Элементы не найдены")
         } else {
-            filtered.forEach { io.println(it.toString()) }
+            filtered.map { it.toString() }
         }
     }
     /**
      * Группирует элементы по id и выводит количество в каждой группе.
      */
-    fun groupCountingById() {
+    fun groupCountingById(): List<String> {
         val grouped = storage.values.groupingBy { it.id }.eachCount()
 
-        if (grouped.isEmpty()) {
-            io.println("Коллекция пуста")
+        return if (grouped.isEmpty()) {
+            listOf("Коллекция пуста")
         } else {
-            grouped.forEach { (id, count) ->
-                io.println("ID: $id -> количество: $count")
-            }
+            grouped.map { (id, count) -> "ID: $id -> количество: $count" }
         }
     }
 
@@ -330,161 +306,109 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
      * Удаляет элементы с ключом больше заданного.
      * @param key ключ для сравнения
      */
-    fun removeGreaterKey(key: Long) {
-        val keysToRemove = mutableListOf<Long>()
-        for (k in storage.keys) {
-            if (k > key) {
-                keysToRemove.add(k)
-            }
-        }
+    fun removeGreaterKey(key: Long): String {
+        val keysToRemove = storage.keys.filter { it > key }
+
         if (keysToRemove.isEmpty()) {
-            io.println("Нет элементов с ключом больше этого")
-            return
-        }
-        for (k in keysToRemove) {
-            storage.remove(k)
+            return "Нет элементов с ключом больше этого"
         }
 
-        io.println("Удалено элементов: ${keysToRemove.size}")
+        keysToRemove.forEach { storage.remove(it) }
+        return "Удалено элементов: ${keysToRemove.size}"
     }
     /**
      * Удаляет элементы, значение которых больше заданного по выбранному параметру.
      */
-    fun removeGreater() {
+    fun removeGreater(param: String, value: Double): String {
         if (storage.isEmpty()) {
-            io.println("Коллекция пуста")
-            return
+            return "Коллекция пуста"
         }
 
-        io.println("По какому параметру сравнивать (id, x, y, toothCount, age, weight, eyesCount)?")
+        val fieldMap: Map<String, (Dragon) -> Double> = mapOf(
+            "id" to { it.id.toDouble() },
+            "x" to { it.coordinates.x.toDouble() },
+            "y" to { it.coordinates.y.toDouble() },
+            "toothCount" to { it.head?.toothCount ?: 0.0 },
+            "age" to { it.age.toDouble() },
+            "weight" to { it.weight },
+            "eyesCount" to { (it.head?.eyesCount ?: 0).toDouble() }
+        )
 
-        val param = io.readLine()
+        val selector = fieldMap[param] ?: return "Неверный параметр"
 
-        io.println("Введите значение для сравнения")
+        val keysToRemove = storage
+            .filter { (_, dragon) -> selector(dragon) > value }
+            .keys
 
-        val value = io.readLine().toDouble()
-        val keysToRemove = mutableListOf<Long>()
-
-        for ((key, dragon) in storage) {
-
-            val fieldMap: Map<String, (Dragon) -> Double> = mapOf(
-                "id" to { it.id.toDouble() },
-                "x" to { it.coordinates.x.toDouble() },
-                "y" to { it.coordinates.y.toDouble() },
-                "toothCount" to { it.head?.toothCount ?: 0.0 },
-                "age" to { it.age.toDouble() },
-                "weight" to { it.weight },
-                "eyesCount" to { (it.head?.eyesCount ?: 0).toDouble() }
-            )
-
-            val selector = fieldMap[param]
-
-            if (selector == null) {
-                io.println("Неверный параметр")
-                return
-            }
-
-            if (selector(dragon) > value) {
-                keysToRemove.add(key)
-            }
+        if (keysToRemove.isEmpty()) {
+            return "Нет элементов, превышающих заданное значение"
         }
 
-        for (k in keysToRemove) {
-            storage.remove(k)
-        }
+        keysToRemove.forEach { storage.remove(it) }
 
-        io.println("Удалено элементов: ${keysToRemove.size}")
+        return "Удалено элементов: ${keysToRemove.size}"
     }
     /**
      * Заменяет значение элемента, если новое больше текущего.
      */
-    fun replaceIfGreater() {
+    fun replaceIfGreater(key: Long, param: String, value: Double): String {
 
         if (storage.isEmpty()) {
-            io.println("Коллекция пуста")
-            return
+            return "Коллекция пуста"
         }
 
-        io.println("Введите ключ элемента для замены:")
-        val key = io.readLine().toLong()
-        val current = storage[key]
-        if (current == null) {
-            io.println("Элемент с таким ключом не найден")
-            return
-        }
-
-        io.println("По какому параметру сравнивать (x, y, toothCount, age, weight, eyesCount)?")
-        val param = io.readLine()
+        val current = storage[key] ?: return "Элемент с таким ключом не найден"
 
         var isReplaced = false
 
         when (param) {
             "x" -> {
-                val value = readFloat("Введите новое значение x")
                 if (value > current.coordinates.x) {
-                    current.coordinates.x = value
+                    current.coordinates.x = value.toFloat()
                     isReplaced = true
                 }
             }
             "y" -> {
-                val value = readLong("Введите новое значение y")
                 if (value > current.coordinates.y) {
-                    current.coordinates.y = value
+                    current.coordinates.y = value.toLong()
                     isReplaced = true
                 }
             }
             "age" -> {
-                val value = readLong("Введите новый возраст")
                 if (value > current.age) {
-                    current.age = value
+                    current.age = value.toLong()
                     isReplaced = true
                 }
             }
             "weight" -> {
-                val value = readDouble("Введите новый вес")
                 if (value > current.weight) {
                     current.weight = value
                     isReplaced = true
                 }
             }
             "eyesCount" -> {
-                val value = readInt("Введите новое количество глаз")
-                val head = current.head
-                if (head == null) {
-                    io.println("У элемента нет головы")
-                    return
-                }
+                val head = current.head ?: return "У элемента нет головы"
                 if (value > head.eyesCount) {
-                    head.eyesCount = value
+                    head.eyesCount = value.toInt()
                     isReplaced = true
                 }
             }
             "toothCount" -> {
-                val value = readDouble("Введите новое количество зубов")
-                val head = current.head
-                if (head == null) {
-                    io.println("У элемента нет головы")
-                    return
-                }
+                val head = current.head ?: return "У элемента нет головы"
                 if (value > head.toothCount) {
                     head.toothCount = value
                     isReplaced = true
                 }
             }
-            else -> {
-                io.println("Неверный параметр")
-                return
-            }
+            else -> return "Неверный параметр"
         }
 
-        if (isReplaced) {
-            io.println("Элемент успешно заменён")
+        return if (isReplaced) {
+            "Элемент успешно заменён"
         } else {
-            io.println("Новое значение не больше старого, замена не выполнена")
+            "Новое значение не больше старого, замена не выполнена"
         }
     }
-
-    private val executingScripts = mutableSetOf<String>()
     /**
      * Выполняет команды из файла.
      * Защищает от рекурсивного вызова скриптов.

@@ -3,6 +3,8 @@ package commands
 import collection.CollectionManager
 import collection.CommandManager
 import collection.IOManager
+import common.Request
+import common.Response
 /**
  * Команда выполнения скрипта.
  * Считывает команды из файла и выполняет их последовательно.
@@ -15,14 +17,16 @@ class ExecuteScriptCommand(
     override val name = "execute_script"
     override val description = "выполнить скрипт из файла"
 
-    override fun execution(args: List<String>) {
+    override fun execute(request: Request): Response {
+        val args = request.argument?.split(" ") ?: emptyList()
 
         if (args.isEmpty()) {
-            io.println("Укажите файл")
-            return
+            return Response("Укажите файл")
         }
 
         val fileName = args[0]
         collectionManager.executeScript(fileName)
+
+        return Response("Скрипт выполнен")
     }
 }

@@ -2,6 +2,8 @@ package commands
 
 import collection.CollectionManager
 import collection.IOManager
+import common.Request
+import common.Response
 /**
  * Команда фильтрации элементов.
  * Выводит элементы, имя которых начинается с заданной строки.
@@ -11,14 +13,17 @@ class FilterStartsWithNameCommand(private val collectionManager: CollectionManag
     override val name = "filter_starts_with_name"
     override val description = "вывести элементы, имя которых начинается с подстроки"
 
-    override fun execution(args: List<String>) {
+    override fun execute(request: Request): Response {
+
+        val args = request.argument?.split(" ") ?: emptyList()
 
         if (args.isEmpty()) {
-            io.println("Введите строку")
-            return
+            return Response("Введите строку")
         }
 
         val prefix = args[0]
-        collectionManager.filterStartsWithName(prefix)
+        val result = collectionManager.filterStartsWithName(prefix)
+
+        return Response("Результат:", result)
     }
 }

@@ -2,6 +2,8 @@ package commands
 
 import collection.CollectionManager
 import collection.IOManager
+import common.Request
+import common.Response
 /**
  * Команда удаления элемента по ключу.
  * Удаляет элемент коллекции по заданному ключу.
@@ -11,22 +13,20 @@ class RemoveKeyCommand(private val collectionManager: CollectionManager, private
     override val name = "remove_key"
     override val description = "удалить элемент по ключу"
 
-    override fun execution(args: List<String>) {
+    override fun execute(request: Request): Response {
+        val args = request.argument?.split(" ") ?: emptyList()
 
         if (args.isEmpty()) {
-            io.println("Введите ключ")
-            return
+            return Response("Введите ключ")
         }
-
 
         val key = try {
             args[0].toLong()
-        }
-        catch (e: NumberFormatException) {
-            io.println("Ключ должен быть числом")
-            return
+        } catch (e: NumberFormatException) {
+            return Response("Ключ должен быть числом")
         }
 
         collectionManager.removeByKey(key)
+        return Response("Элемент удалён")
     }
 }
