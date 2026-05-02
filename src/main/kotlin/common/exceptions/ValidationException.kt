@@ -1,4 +1,4 @@
-package exceptions
+package common.exceptions
 /**
  * Исключение, возникающее при ошибке валидации данных.
  */

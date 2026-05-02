@@ -1,15 +1,14 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
-import exceptions.ValidationException
-import collection.IOManager
+import server.CollectionManager
+import common.exceptions.ValidationException
 import common.Request
 import common.Response
 /**
  * Команда обновления элемента.
  * Обновляет значение элемента по заданному id.
  */
-class UpdateCommand(private val collectionManager: CollectionManager, private val io: IOManager) : Command {
+class UpdateCommand(private val collectionManager: CollectionManager) : Command {
     override val name = "update"
     override val description = "обновить элемент по id"
 
@@ -26,8 +25,10 @@ class UpdateCommand(private val collectionManager: CollectionManager, private va
             return Response("id должен быть числом")
         }
 
+        val dragon = request.dragon
+            ?: return Response("Дракон не передан в запросе")
+
         return try {
-            val dragon = collectionManager.createDragon(id.toInt())
             collectionManager.updateById(id, dragon)
             Response("Элемент обновлён")
         } catch (e: ValidationException) {

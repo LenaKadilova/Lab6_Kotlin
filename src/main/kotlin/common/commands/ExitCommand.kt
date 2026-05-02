@@ -1,18 +1,18 @@
-package commands
+package common.commands
 
-import exceptions.ExitException
-import collection.IOManager
+import common.Request
+import common.Response
+import common.exceptions.ExitException
 
 /**
  * Команда выхода из программы.
  * Завершает выполнение без сохранения коллекции.
  */
-class ExitCommand(private val io: IOManager) : Command {
+class ExitCommand() : Command {
     override val name = "exit"
     override val description = "завершить программу"
 
-    override fun execution(args: List<String>) {
-        io.println("Программа завершена")
-        throw ExitException()
+    override fun execute(request: Request): Response {
+        return Response("exit — только клиентская команда")
     }
 }

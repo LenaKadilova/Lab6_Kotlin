@@ -1,8 +1,8 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
-import collection.CommandManager
-import collection.IOManager
+import server.CollectionManager
+import server.CommandManager
+import client.IOManager
 import common.Request
 import common.Response
 /**

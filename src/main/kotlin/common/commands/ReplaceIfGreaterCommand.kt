@@ -1,6 +1,6 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
+import server.CollectionManager
 import common.Request
 import common.Response
 

@@ -1,12 +1,12 @@
-package collection
+package server
 
-import model.*
+import common.model.*
 import java.io.File
 import java.time.LocalDateTime
 import java.io.BufferedInputStream
 import com.google.gson.*
 import java.lang.reflect.Type
-import exceptions.*
+import common.exceptions.*
 
 /**
  * Класс для работы с файлами коллекции.

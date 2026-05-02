@@ -1,15 +1,14 @@
-package commands
+package common.commands
 
 
-import collection.CommandManager
-import collection.IOManager
+import server.CommandManager
 import common.Request
 import common.Response
 /**
  * Команда вывода справки.
  * Показывает список всех доступных команд и их описание.
  */
-class HelpCommand(private val commandManager: CommandManager, private val io: IOManager) : Command {
+class HelpCommand(private val commandManager: CommandManager) : Command {
     override val name = "help"
     override val description = "вывести справку по доступным командам"
 

@@ -1,6 +1,6 @@
-package collection
+package server
 
-import commands.Command
+import common.commands.Command
 import common.Request
 import common.Response
 
@@ -24,8 +24,7 @@ class CommandManager {
      * @return результат выполнения команды
      */
     fun execute(request: Request): Response {
-        val comma
-        nd = commands[request.commandName]
+        val command = commands[request.commandName]
             ?: return Response("Команда не найдена")
 
         return command.execute(request)

@@ -1,15 +1,13 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
-import collection.IOManager
+import server.CollectionManager
 import common.Request
 import common.Response
 /**
  * Команда удаления элемента по ключу.
  * Удаляет элемент коллекции по заданному ключу.
  */
-class RemoveKeyCommand(private val collectionManager: CollectionManager, private val io: IOManager) : Command {
-
+class RemoveKeyCommand(private val collectionManager: CollectionManager) : Command {
     override val name = "remove_key"
     override val description = "удалить элемент по ключу"
 

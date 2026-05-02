@@ -1,6 +1,6 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
+import server.CollectionManager
 import common.Request
 import common.Response
 /**
@@ -13,7 +13,6 @@ class GroupCountingByIdCommand(private val collectionManager: CollectionManager)
     override val description = "сгруппировать элементы по id"
 
     override fun execute(request: Request): Response {
-        val result = collectionManager.groupCountingById()
-        return Response("Группировка:", result)
+        return Response("Группировка:", lines = collectionManager.groupCountingById())
     }
 }

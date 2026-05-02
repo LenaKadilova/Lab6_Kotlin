@@ -1,7 +1,7 @@
-package commands
+package common.commands
 
 
-import collection.CollectionManager
+import server.CollectionManager
 import common.Request
 import common.Response
 /**
@@ -13,7 +13,6 @@ class ShowCommand(private val collectionManager: CollectionManager) : Command {
     override val description = "вывести все элементы коллекции"
 
     override fun execute(request: Request): Response {
-        val data = collectionManager.ShowAll()
-        return Response("Коллекция:", data)
+        return Response("Коллекция:", lines = collectionManager.ShowAll())
     }
 }

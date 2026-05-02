@@ -1,14 +1,13 @@
-package commands
+package common.commands
 
-import collection.CollectionManager
-import collection.IOManager
+import server.CollectionManager
 import common.Request
 import common.Response
 /**
  * Команда вывода информации о коллекции.
  * Отображает тип коллекции, дату инициализации и количество элементов.
  */
-class InfoCommand(private val collectionManager: CollectionManager, private val io: IOManager) : Command {
+class InfoCommand(private val collectionManager: CollectionManager) : Command {
     override val name = "info"
     override val description = "вывести информацию о коллекции (тип, дата инициализации, количество элементов, файл)"
 
