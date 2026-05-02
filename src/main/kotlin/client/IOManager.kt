@@ -48,15 +48,21 @@ class IOManager {
      * Считывает строку из текущего источника ввода.
      * @return введённая строка
      */
-    fun readLine(): String {
-        return if (scanner.hasNextLine()) scanner.nextLine() else ""
-    }
-    /**
-     * Устанавливает файл как источник ввода.
-     * @param file файл
-     */
-    fun setFileInput(file: File) {
+    var currentFile: String? = null
+
+    fun setFileInput(file: java.io.File) {
+        currentFile = file.name
         scanner = Scanner(file)
+    }
+
+    fun readLine(): String {
+        return if (scanner.hasNextLine()) {
+            scanner.nextLine()
+        } else {
+            currentFile = null
+            scanner = Scanner(System.`in`)
+            ""
+        }
     }
     fun readLong(message: String): Long {
         while (true) {

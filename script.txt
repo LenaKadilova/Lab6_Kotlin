@@ -33,8 +33,9 @@ yes
 28
 show
 update 1
-DragonFire 10
-0
+DragonFire
+101
+20
 200
 76.0
 fire
@@ -58,12 +59,8 @@ yes
 2
 28
 remove_key 3
-replace_if_greater
-2
-weight
-12
+replace_if_greater 2 weight 12
 print_ascending x
-save saved.json
 execute_script another_script.txt
 execute_script script.txt
 clear
