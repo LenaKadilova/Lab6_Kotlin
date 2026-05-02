@@ -2,6 +2,7 @@ package commands
 
 import collection.CollectionManager
 import collection.IOManager
+import model.*
 /**
  * Команда удаления по ключу.
  * Удаляет элементы, ключ которых больше заданного.
@@ -11,11 +12,10 @@ class RemoveGreaterKeyCommand(private val collectionManager: CollectionManager, 
     override val name = "remove_greater_key"
     override val description = "удалить из коллекции все элементы, ключ которых больше заданного"
 
-    override fun execution(args: List<String>) {
+    override fun execution(args: List<String>, dragon: Dragon?): String {
 
         if (args.isEmpty()) {
-            io.println("Необходимо указать ключ")
-            return
+            return "Необходимо указать ключ"
         }
 
         val key: Long
@@ -23,10 +23,9 @@ class RemoveGreaterKeyCommand(private val collectionManager: CollectionManager, 
         try {
             key = args[0].toLong()
         } catch (e: NumberFormatException) {
-            io.println("Ключ должен быть числом")
-            return
+            return "Ключ должен быть числом"
         }
 
-        collectionManager.removeGreaterKey(key)
+        return collectionManager.removeGreaterKey(key)
     }
 }

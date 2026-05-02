@@ -3,6 +3,7 @@ package commands
 import collection.CollectionManager
 import exceptions.ValidationException
 import collection.IOManager
+import model.*
 
 /**
  * Команда добавления элемента.
@@ -12,10 +13,9 @@ class InsertCommand(private val collectionManager: CollectionManager, private va
     override val name = "insert"
     override val description = "добавить новый элемент с заданным ключом"
 
-    override fun execution(args: List<String>) {
+    override fun execution(args: List<String>, dragon: Dragon?): String {
         if (args.isEmpty()) {
-            io.println("Необходимо указать ключ")
-            return
+            return "Необходимо указать ключ"
         }
 
         val key: Long
@@ -23,22 +23,26 @@ class InsertCommand(private val collectionManager: CollectionManager, private va
             key = args[0].toLong()
         }
         catch (e: NumberFormatException){
-            io.println("Ключ должен быть числом")
-            return
+            return "Ключ должен быть числом"
+        }
+
+        if (dragon == null) {
+            return "Ошибка: объект не передан"
         }
 
         if (collectionManager.storage.containsKey(key)) {
-            io.println("Уже существует элемент с таким ключом")
-            return
+            return "Уже существует элемент с таким ключом"
         }
 
-        try {
-            val dragon = collectionManager.createDragon(collectionManager.nextId())
-                collectionManager.storage[key] = dragon
-            io.println("Дракон добавлен")
-        }
-        catch (e: ValidationException) {
-            io.println("Ошибка: ${e.message}")
-        }
+        //try {
+        //    val dragon = collectionManager.createDragon(collectionManager.nextId())
+        //        collectionManager.storage[key] = dragon
+        //    io.println("Дракон добавлен")
+        //}
+        //catch (e: ValidationException) {
+        //    io.println("Ошибка: ${e.message}")
+        //}
+        collectionManager.storage[key] = dragon
+        return "Дракончика добавили"
     }
 }

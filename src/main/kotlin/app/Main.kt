@@ -73,11 +73,13 @@ fun main(args: Array<String>) {
             val nameCommand = commandDecoding[0]
             val commandArgs = commandDecoding.drop(1)
 
-            val isExecuted = commandManager.execution(nameCommand, commandArgs)
+            //val result = commandManager.execution(nameCommand, commandArgs)
 
-            if (!isExecuted) {
-                io.println("Команды $nameCommand нет \nВведите help")
-            }
+            //if (result == null) {
+                //io.println("Команды $nameCommand нет \nВведите help")
+            //} else {
+               // io.println(result)
+           // }
         }
     } catch (e: ExitException) {}
 }

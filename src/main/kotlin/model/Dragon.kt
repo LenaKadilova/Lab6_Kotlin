@@ -1,6 +1,7 @@
 package model
 import java.time.LocalDateTime
 import exceptions.ValidationException
+import java.io.Serializable
 /**
  * Класс дракона.
  * Описывает элемент коллекции.
@@ -27,7 +28,7 @@ data class Dragon(
     var type: DragonType, // не null
     var character: DragonCharacter, // не null
     var head: DragonHead?
-) : Comparable<Dragon> {
+) : Comparable<Dragon>, Serializable {
     /**
      * Сравнивает драконов по id.
      */

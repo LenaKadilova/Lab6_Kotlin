@@ -3,6 +3,7 @@ package commands
 
 import collection.CommandManager
 import collection.IOManager
+import model.*
 /**
  * Команда вывода справки.
  * Показывает список всех доступных команд и их описание.
@@ -11,11 +12,13 @@ class HelpCommand(private val commandManager: CommandManager, private val io: IO
     override val name = "help"
     override val description = "вывести справку по доступным командам"
 
-    override fun execution(args: List<String>) {
-        io.println("Доступные команды:")
+    override fun execution(args: List<String>, dragon: Dragon?): String {
+        var result = "Доступные команды:\n"
 
         for (command in commandManager.allCommands()) {
-            io.println("${command.name}: ${command.description}")
+            result += "${command.name}: ${command.description}\n"
         }
+
+        return result
     }
 }

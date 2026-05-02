@@ -2,6 +2,7 @@ package commands
 
 import collection.CollectionManager
 import collection.IOManager
+import model.*
 
 /**
  * Команда вывода информации о коллекции.
@@ -11,10 +12,9 @@ class InfoCommand(private val collectionManager: CollectionManager, private val 
     override val name = "info"
     override val description = "вывести информацию о коллекции (тип, дата инициализации, количество элементов, файл)"
 
-    override fun execution(args: List<String>) {
-        io.println("Тип коллекции: java.util.Hashtable")
-        io.println("Дата инициализации: ${collectionManager.time}")
-        io.println("Количество элементов: ${collectionManager.size()}")
-        //println("Файл: ${collectionManager.FileName}")
+    override fun execution(args: List<String>, dragon: Dragon?):  String {
+        return "Тип коллекции: java.util.Hashtable\n" +
+                "Дата инициализации: ${collectionManager.time}\n" +
+                "Количество элементов: ${collectionManager.size()}"
     }
 }

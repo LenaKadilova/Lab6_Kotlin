@@ -1,6 +1,7 @@
 package collection
 
 import commands.Command
+import model.*
 
 /**
  * Класс для управления командами.
@@ -22,13 +23,11 @@ class CommandManager {
      * @param args аргументы команды
      * @return true если команда найдена и выполнена, иначе false
      */
-    fun execution (name: String, args: List<String>): Boolean {
-        val command = commands[name]
+    fun execution(name: String, args: List<String>, dragon: Dragon?): String? {        val command = commands[name]
         if (command == null) {
-            return false
+            return null
         }
-        command.execution(args)
-        return true
+        return command.execution(args, dragon)
     }
     /**
      * Возвращает список всех команд.

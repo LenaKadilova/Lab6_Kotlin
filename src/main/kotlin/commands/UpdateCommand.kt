@@ -3,6 +3,7 @@ package commands
 import collection.CollectionManager
 import exceptions.ValidationException
 import collection.IOManager
+import model.*
 /**
  * Команда обновления элемента.
  * Обновляет значение элемента по заданному id.
@@ -11,26 +12,25 @@ class UpdateCommand(private val collectionManager: CollectionManager, private va
     override val name = "update"
     override val description = "обновить элемент по id"
 
-    override fun execution(args: List<String>) {
+    override fun execution(args: List<String>, dragon: Dragon?): String {
         if (args.isEmpty()) {
-            io.println("Необходимо указать id")
-            return
+            return "Необходимо указать id"
         }
 
-        val id: Long
-        try {
-            id = args[0].toLong()
+
+
+        val id = try {
+            args[0].toInt()
         } catch (e: NumberFormatException) {
-            io.println("id должен быть числом")
-            return
+            return "id должен быть числом"
         }
 
-        try {
-            val dragon = collectionManager.createDragon(id.toInt())
-            collectionManager.updateById(id, dragon)
+        if (dragon == null) {
+            return "Ошибка: объект не передан"
         }
-        catch (e: ValidationException) {
-            io.println("Ошибка: ${e.message}")
-        }
+
+
+        return collectionManager.updateById(id, dragon)
     }
+
 }

@@ -41,6 +41,16 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
         }
     }
 
+    fun showAsString(): String {
+        if (storage.isEmpty()) {
+            return "Коллекция пустая"
+        }
+
+        return storage.entries.joinToString("\n") { entry ->
+            "Ключ = ${entry.key}\nЗначение = ${entry.value}"
+        }
+    }
+
     fun clear() {
         storage.clear()
     }
@@ -59,14 +69,16 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
     /**
      * Выводит элементы коллекции, отсортированные по выбранному параметру.
      */
-    fun printAscending() {
+    fun printAscending(param: String?): String{
         if (storage.isEmpty()) {
-            io.println("Элементы не найдены")
-            return
+            return "Элементы не найдены"
+
         }
 
-        io.println("По какому параметру сортировать (id, x, y, creationDate, age, weight, eyesCount, toothCount)?")
-        val param = io.readLine()
+        if (param == null) {
+            return "Не указан параметр сортировки (id, x, y, creationDate, age, weight, eyesCount, toothCount)"
+        }
+
         var sortedList = storage.values.toList()
 
         when (param) {
@@ -95,26 +107,38 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
                 sortedList = storage.values.sortedBy { it.head?.toothCount }
             }
             else -> {
-                io.println("Неверный параметр")
-                return
+                return "Неверный параметр"
             }
         }
+
+        var result = ""
         for (dragon in sortedList) {
-            io.println(dragon.toString())
+            result += "$dragon\n"
         }
+
+        return result
     }
     /**
      * Фильтрует элементы по префиксу имени.
      * @param prefix начало имени
      */
-    fun filterStartsWithName(prefix: String) {
-        val filtered = storage.values.filter { it.name.startsWith(prefix) }
-
-        if (filtered.isEmpty()) {
-            io.println("Элементы не найдены")
-        } else {
-            filtered.forEach { io.println(it.toString()) }
+    fun filterStartsWithName(prefix: String?): String {
+        if (prefix == null) {
+            return "Введите строку"
         }
+
+        var result = ""
+
+        for (dragon in storage.values) {
+            if (dragon.name.startsWith(prefix)) {
+                result += "$dragon\n"
+            }
+        }
+
+        if (result.isEmpty()) {
+            io.println("Элементы не найдены")
+        }
+        return result
     }
     /**
      * Группирует элементы по id и выводит количество в каждой группе.
@@ -239,7 +263,7 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
      * @param id идентификатор элемента
      * @param newDragon новый объект
      */
-    fun updateById(id: Long, newDragon: Dragon) {
+    /*fun updateById(id: Long, newDragon: Dragon) {
         var keyToUpdate: Long? = null
         var oldDragon: Dragon? = null
 
@@ -263,6 +287,20 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
 
         storage[keyToUpdate] = updatedDragon
         io.println("Элемент обновлён")
+    }*/
+    fun updateById(id: Int, newDragon: Dragon): String {
+        try {
+            for ((key, value) in storage) {
+                if (value.id == id) {
+                    storage[key] = newDragon
+                    return "Дракон обновлён"
+                }
+            }
+            return "Дракон с таким id не найден"
+
+        } catch (e: Exception) {
+            return "Ошибка: ${e.message}"
+        }
     }
 
     /**
@@ -330,7 +368,7 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
      * Удаляет элементы с ключом больше заданного.
      * @param key ключ для сравнения
      */
-    fun removeGreaterKey(key: Long) {
+    fun removeGreaterKey(key: Long): String {
         val keysToRemove = mutableListOf<Long>()
         for (k in storage.keys) {
             if (k > key) {
@@ -338,31 +376,42 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
             }
         }
         if (keysToRemove.isEmpty()) {
-            io.println("Нет элементов с ключом больше этого")
-            return
+            return "Нет элементов с ключом больше этого"
         }
         for (k in keysToRemove) {
             storage.remove(k)
         }
 
-        io.println("Удалено элементов: ${keysToRemove.size}")
+        return "Удалено элементов: ${keysToRemove.size}"
     }
     /**
      * Удаляет элементы, значение которых больше заданного по выбранному параметру.
      */
-    fun removeGreater() {
+    fun removeGreater(param: String?, valueArg: String?): String {
         if (storage.isEmpty()) {
-            io.println("Коллекция пуста")
-            return
+            return "Коллекция пуста"
+
         }
 
-        io.println("По какому параметру сравнивать (id, x, y, toothCount, age, weight, eyesCount)?")
+        if (param == null) {
+            return "Не указали параметр сравнения (id, x, y, toothCount, age, weight, eyesCount)"
+        }
 
-        val param = io.readLine()
+        if (valueArg == null) {
+            return "Не ввели значение для сравнения"
+        }
 
-        io.println("Введите значение для сравнения")
 
-        val value = io.readLine().toDouble()
+
+
+
+        val value = try {
+            valueArg.toDouble()
+        } catch (e: NumberFormatException) {
+            return "Значение должно быть числом"
+        }
+
+
         val keysToRemove = mutableListOf<Long>()
 
         for ((key, dragon) in storage) {
@@ -380,8 +429,8 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
             val selector = fieldMap[param]
 
             if (selector == null) {
-                io.println("Неверный параметр")
-                return
+                return "Неверный параметр"
+
             }
 
             if (selector(dragon) > value) {
@@ -393,7 +442,7 @@ class CollectionManager (val time: LocalDateTime, val fileName: String, private 
             storage.remove(k)
         }
 
-        io.println("Удалено элементов: ${keysToRemove.size}")
+        return "Удалено элементов: ${keysToRemove.size}"
     }
     /**
      * Заменяет значение элемента, если новое больше текущего.
