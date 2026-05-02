@@ -1,7 +1,7 @@
 package server
 
 import common.Request
-import server.CommandManager
+import org.slf4j.LoggerFactory
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetSocketAddress
@@ -10,16 +10,17 @@ import java.nio.channels.Selector
 import java.nio.channels.ServerSocketChannel
 import java.nio.channels.SocketChannel
 
+class Server(collectionManager: CollectionManager, private val commandManager: CommandManager) {
 
-class Server(private val collectionManager: CollectionManager, private val commandManager: CommandManager) {
+    private val logger = LoggerFactory.getLogger(Server::class.java)
 
     fun start() {
         val selector = Selector.open()
         val serverChannel = ServerSocketChannel.open()
         serverChannel.bind(InetSocketAddress(12345))
-        serverChannel.configureBlocking(false)          // неблокирующий режим!
+        serverChannel.configureBlocking(false)
         serverChannel.register(selector, SelectionKey.OP_ACCEPT)
-        println("Сервер запущен на порту 12345")
+        logger.info("Сервер запущен на порту 12345")
 
         while (true) {
             selector.select()
@@ -30,7 +31,8 @@ class Server(private val collectionManager: CollectionManager, private val comma
                 when {
                     key.isAcceptable -> {
                         val client = serverChannel.accept()
-                        client.configureBlocking(true)  // для ObjectInputStream удобнее
+                        logger.info("Новое подключение: ${client.remoteAddress}")
+                        client.configureBlocking(true)
                         handleClient(client)
                     }
                 }
@@ -44,8 +46,10 @@ class Server(private val collectionManager: CollectionManager, private val comma
         output.flush()
         val input = ObjectInputStream(socket.getInputStream())
         val request = input.readObject() as Request
+        logger.info("Получен запрос: ${request.commandName}")
         val response = commandManager.execute(request)
         output.writeObject(response)
+        logger.info("Отправлен ответ на команду: ${request.commandName}")
         socket.close()
     }
 }

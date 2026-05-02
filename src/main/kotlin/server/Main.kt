@@ -35,7 +35,6 @@ fun main(args: Array<String>) {
     commandManager.addToList(RemoveGreaterCommand(collectionManager))
     commandManager.addToList(RemoveKeyCommand(collectionManager))
     commandManager.addToList(ReplaceIfGreaterCommand(collectionManager))
-    // SaveCommand НЕ добавляем — save вызывается только сервером напрямую
 
     val server = Server(collectionManager, commandManager)
     server.start()

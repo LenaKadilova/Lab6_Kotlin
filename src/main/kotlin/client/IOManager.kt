@@ -16,7 +16,6 @@ import java.io.PrintStream
 class IOManager {
     private var scanner: Scanner = Scanner(System.`in`)
     private val outStream: PrintStream = PrintStream(System.out, true, "UTF-8")
-    private val errStream: PrintStream = PrintStream(System.err, true, "UTF-8")
     /**
      * Выводит сообщение в консоль.
      * @param message текст сообщения
@@ -30,13 +29,6 @@ class IOManager {
      */
     fun print(message: String) {
         outStream.print(message)
-    }
-    /**
-     * Выводит сообщение об ошибке в консоль.
-     * @param message текст сообщения
-     */
-    fun eprintln(message: String) {
-        errStream.println(message)
     }
     /**
      * Сбрасывает буфер вывода.
