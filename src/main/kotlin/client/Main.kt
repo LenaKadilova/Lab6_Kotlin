@@ -34,6 +34,28 @@ fun main() {
             continue
         }
 
+
+        if (commandName == "help") {
+            println("""Доступные команды:
+    help : вывести справку по доступным командам
+    info : вывести информацию о коллекции
+    show : вывести все элементы коллекции
+    insert null {element} : добавить новый элемент с заданным ключом
+    update id {element} : обновить значение элемента коллекции, id которого равен заданному
+    remove_key null : удалить элемент из коллекции по его ключу
+    clear : очистить коллекцию
+    execute_script file_name : считать и исполнить скрипт из указанного файла
+    exit : завершить программу
+    remove_greater {element} : удалить из коллекции все элементы, превышающие заданный
+    remove_greater_key null : удалить из коллекции все элементы, ключ которых превышает заданный
+    replace_if_greater null {element} : заменить значение по ключу, если новое значение больше старого
+    group_counting_by_id : сгруппировать элементы коллекции по значению поля id
+    filter_starts_with_name name : вывести элементы, значение поля name которых начинается с заданной подстроки
+    print_ascending : вывести элементы коллекции в порядке возрастания
+        """.trimIndent())
+            continue
+        }
+
         if (commandName == "execute_script") {
             val fileName = argument ?: run {
                 println("Укажите файл")
