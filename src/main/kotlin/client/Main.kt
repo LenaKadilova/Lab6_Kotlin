@@ -18,7 +18,7 @@ fun main() {
         if (io.currentFile == null) {
             executingScripts.clear()
         }
-        if (line.isEmpty()) continue
+        if (line.isBlank()) continue
 
         val parts = line.trim().split(Regex("\\s+"))
         val commandName = parts[0]
