@@ -11,6 +11,11 @@ fun main() {
 
     println("Клиент запущен. Введите команду:")
 
+    val initResponse = client.send(Request("__commands__", null, null))
+    if (initResponse != null) {
+        availableCommands.putAll(initResponse.commands)
+    }
+
     while (true) {
         io.print("> ")
         io.flush()

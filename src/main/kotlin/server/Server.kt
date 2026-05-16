@@ -46,13 +46,17 @@ class Server(collectionManager: CollectionManager, private val commandManager: C
         output.flush()
         val input = ObjectInputStream(socket.getInputStream())
         val request = input.readObject() as Request
-        logger.info("Получен запрос: ${request.commandName}")
+        if (request.commandName != "__commands__") {
+            logger.info("Получен запрос: ${request.commandName}")
+        }
         val response = commandManager.execute(request)
 
         val responseWithCommands = response.copy(commands = commandManager.getCommandDescriptions())
         output.writeObject(responseWithCommands)
 
-        logger.info("Отправлен ответ на команду: ${request.commandName}")
+        if (request.commandName != "__commands__") {
+            logger.info("Отправлен ответ на команду: ${request.commandName}")
+        }
         socket.close()
     }
 }
