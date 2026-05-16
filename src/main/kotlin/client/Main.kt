@@ -7,6 +7,7 @@ fun main() {
     val client = Client("localhost", 12345)
     val io = IOManager()
     val executingScripts = mutableSetOf<String>()
+    val availableCommands = mutableSetOf<String>()
 
     println("Клиент запущен. Введите команду:")
 
@@ -35,7 +36,7 @@ fun main() {
         }
 
 
-        if (commandName == "help") {
+        /*if (commandName == "help") {
             println("""Доступные команды:
     help : вывести справку по доступным командам
     info : вывести информацию о коллекции
@@ -54,7 +55,7 @@ fun main() {
     print_ascending : вывести элементы коллекции в порядке возрастания
         """.trimIndent())
             continue
-        }
+        }*/
 
         if (commandName == "execute_script") {
             val fileName = argument ?: run {
@@ -72,6 +73,11 @@ fun main() {
             }
             executingScripts.add(fileName)
             io.setFileInput(file)
+            continue
+        }
+
+        if (availableCommands.isNotEmpty() && commandName !in availableCommands) {
+            println("Команда недоступна на сервере")
             continue
         }
 
@@ -93,8 +99,13 @@ fun main() {
         val response = client.send(request)
 
         if (response != null) {
+
+            availableCommands.clear()
+            availableCommands.addAll(response.commands.keys)
+
             println(response.message)
-            response.lines?.forEach { println(it) }
+            response.lines?.forEach { line -> println(line) }
+
         } else {
             println("Сервер недоступен, попробуйте позже")
         }

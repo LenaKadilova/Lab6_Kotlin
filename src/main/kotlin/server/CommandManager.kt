@@ -34,4 +34,8 @@ class CommandManager {
      * @return список команд
      */
     fun allCommands(): List<Command>     = commands.values.toList()
+
+    fun getCommandDescriptions(): Map<String, String> {
+        return commands.mapValues { it.value.description }
+    }
 }
