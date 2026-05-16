@@ -76,6 +76,14 @@ fun main() {
         }
 
         val dragon = if (commandName in listOf("insert", "update")) {
+            if (argument == null) {
+                println("Необходимо указать ключ")
+                continue
+            }
+            if (argument.toLongOrNull() == null) {
+                println("Ключ должен быть числом")
+                continue
+            }
             io.createDragon(0)
         } else {
             null
