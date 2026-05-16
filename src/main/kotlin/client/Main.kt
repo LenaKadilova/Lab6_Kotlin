@@ -7,7 +7,7 @@ fun main() {
     val client = Client("localhost", 12345)
     val io = IOManager()
     val executingScripts = mutableSetOf<String>()
-    val availableCommands = mutableSetOf<String>()
+    val availableCommands = mutableMapOf<String, String>()
 
     println("Клиент запущен. Введите команду:")
 
@@ -35,7 +35,17 @@ fun main() {
             continue
         }
 
-
+        if (commandName == "help") {
+            if (availableCommands.isEmpty()) {
+                println("Список команд ещё не получен от сервера")
+            } else {
+                println("Доступные команды:")
+                availableCommands.forEach { commandName, description ->
+                    println("$commandName : $description")
+                }
+            }
+            continue
+        }
         /*if (commandName == "help") {
             println("""Доступные команды:
     help : вывести справку по доступным командам
@@ -76,7 +86,7 @@ fun main() {
             continue
         }
 
-        if (availableCommands.isNotEmpty() && commandName !in availableCommands) {
+        if (availableCommands.isNotEmpty() && commandName !in availableCommands.keys) {
             println("Команда недоступна на сервере")
             continue
         }
@@ -101,7 +111,7 @@ fun main() {
         if (response != null) {
 
             availableCommands.clear()
-            availableCommands.addAll(response.commands.keys)
+            availableCommands.putAll(response.commands)
 
             println(response.message)
             response.lines?.forEach { line -> println(line) }
