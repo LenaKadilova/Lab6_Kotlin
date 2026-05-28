@@ -46,13 +46,18 @@ class Server(collectionManager: CollectionManager, private val commandManager: C
         output.flush()
         val input = ObjectInputStream(socket.getInputStream())
         val request = input.readObject() as Request
-        logger.info("Получен запрос: ${request.commandName}")
-        val response = commandManager.execute(request)
+        val loggable = commandManager.isLoggable(request.commandName)
 
-        val responseWithCommands = response.copy(commands = commandManager.getCommandDescriptions())
+        if (loggable) logger.info("Получен запрос: ${request.commandName}")
+
+        val response = commandManager.execute(request)
+        val responseWithCommands = response.copy(
+            commands = commandManager.getCommandDescriptions(),
+            commandsRequiringDragon = commandManager.getCommandsRequiringDragon()
+        )
         output.writeObject(responseWithCommands)
 
-        logger.info("Отправлен ответ на команду: ${request.commandName}")
+        if (loggable) logger.info("Отправлен ответ на команду: ${request.commandName}")
         socket.close()
     }
 }

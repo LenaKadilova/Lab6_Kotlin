@@ -9,33 +9,26 @@ import common.Response
  * Хранит список доступных команд и выполняет их по имени.
  */
 class CommandManager {
-    private val commands: MutableMap <String, Command> = linkedMapOf()
-    /**
-     * Добавляет команду в список.
-     * @param command команда
-     */
-    fun addToList (command: Command) {
+    private val commands: MutableMap<String, Command> = linkedMapOf()
+
+    fun addToList(command: Command) {
         commands[command.name] = command
     }
-    /**
-     * Выполняет команду по запросу.
-     *
-     * @param request запрос от клиента
-     * @return результат выполнения команды
-     */
+
     fun execute(request: Request): Response {
         val command = commands[request.commandName]
             ?: return Response("Команда не найдена")
-
         return command.execute(request)
     }
-    /**
-     * Возвращает список всех команд.
-     * @return список команд
-     */
-    fun allCommands(): List<Command>     = commands.values.toList()
 
-    fun getCommandDescriptions(): Map<String, String> {
-        return commands.mapValues { it.value.description }
-    }
+    fun allCommands(): List<Command> = commands.values.toList()
+
+    fun getCommandDescriptions(): Map<String, String> =
+        commands.mapValues { it.value.description }
+
+    fun getCommandsRequiringDragon(): Set<String> =
+        commands.values.filter { it.requiresDragon }.map { it.name }.toSet()
+
+    fun isLoggable(commandName: String): Boolean =
+        commands[commandName]?.loggable ?: true
 }

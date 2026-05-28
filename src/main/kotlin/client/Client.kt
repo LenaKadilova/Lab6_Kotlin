@@ -7,8 +7,7 @@ import java.io.ObjectOutputStream
 import java.net.Socket
 import java.net.ConnectException
 
-
-class Client(private val host: String, private val port: Int) {
+class Client(private val host: String, private val port: Int, private val io: IOManager) {
 
     fun send(request: Request): Response? {
         return try {
@@ -21,7 +20,7 @@ class Client(private val host: String, private val port: Int) {
             socket.close()
             response
         } catch (e: ConnectException) {
-            println("Сервер недоступен: ${e.message}")
+            io.println("Сервер недоступен: ${e.message}")
             null
         }
     }

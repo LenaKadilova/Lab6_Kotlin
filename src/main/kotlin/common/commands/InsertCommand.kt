@@ -4,13 +4,15 @@ import server.CollectionManager
 import common.exceptions.ValidationException
 import common.Request
 import common.Response
+
 /**
  * Команда добавления элемента.
  * Добавляет новый элемент с заданным ключом в коллекцию.
  */
-class InsertCommand(private val collectionManager: CollectionManager): Command {
+class InsertCommand(private val collectionManager: CollectionManager) : Command {
     override val name = "insert"
     override val description = "добавить новый элемент с заданным ключом"
+    override val requiresDragon = true
 
     override fun execute(request: Request): Response {
         val key = request.argument?.toLongOrNull()
