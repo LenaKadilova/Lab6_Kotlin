@@ -1,9 +1,11 @@
-package common.commands
+package server.commands
 
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
+
 /**
  * Команда вывода элементов коллекции.
  * Отображает все элементы в строковом представлении.

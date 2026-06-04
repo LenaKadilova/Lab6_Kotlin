@@ -1,8 +1,10 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
+
 /**
  * Команда фильтрации элементов.
  * Выводит элементы, имя которых начинается с заданной строки.

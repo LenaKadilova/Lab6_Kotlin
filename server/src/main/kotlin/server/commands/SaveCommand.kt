@@ -1,14 +1,14 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
-import client.IOManager
 import common.Request
 import common.Response
+import common.commands.Command
 /**
  * Команда сохранения коллекции.
  * Сохраняет текущее состояние коллекции в файл.
  */
-class SaveCommand(private val collectionManager: CollectionManager, private val io: IOManager) : Command {
+class SaveCommand(private val collectionManager: CollectionManager) : Command {
 
     override val name = "save"
     override val description = "сохранить коллекцию в файл"

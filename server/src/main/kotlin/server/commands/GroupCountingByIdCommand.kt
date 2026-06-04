@@ -1,8 +1,10 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
+
 /**
  * Команда группировки элементов.
  * Группирует элементы по id и выводит количество в каждой группе.

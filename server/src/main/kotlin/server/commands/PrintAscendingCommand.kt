@@ -1,8 +1,10 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
+
 /**
  * Команда сортировки элементов.
  * Выводит элементы коллекции в порядке возрастания.
@@ -14,6 +16,8 @@ class PrintAscendingCommand(private val collectionManager: CollectionManager) : 
 
     override fun execute(request: Request): Response {
         val param = request.argument ?: return Response("Укажите параметр сортировки")
-        return Response("Отсортированная коллекция:", lines = collectionManager.printAscending(param))
+        val result = collectionManager.printAscending(param)
+        if (result.firstOrNull() == "Неверный параметр") return Response("Неверный параметр")
+        return Response("Отсортированная коллекция:", lines = result)
     }
 }

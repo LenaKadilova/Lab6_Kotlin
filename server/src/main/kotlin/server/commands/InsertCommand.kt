@@ -1,9 +1,9 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
-import common.exceptions.ValidationException
 import common.Request
 import common.Response
+import common.commands.Command
 
 /**
  * Команда добавления элемента.

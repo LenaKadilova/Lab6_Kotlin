@@ -45,6 +45,11 @@ fun main() {
         }
 
         val dragon = if (commandName in commandsRequiringDragon) {
+            val key = argument?.toLongOrNull()
+            if (key == null) {
+                io.println("Необходимо указать числовой ключ")
+                continue
+            }
             io.createDragon(0)
         } else {
             null

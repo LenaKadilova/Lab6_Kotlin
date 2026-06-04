@@ -1,12 +1,29 @@
 package server
 
 import common.commands.*
+import server.commands.HelpCommand
+import server.commands.SaveCommand
 import java.time.LocalDateTime
+import org.slf4j.LoggerFactory
+import server.commands.ClearCommand
+import server.commands.FilterStartsWithNameCommand
+import server.commands.GroupCountingByIdCommand
+import server.commands.InfoCommand
+import server.commands.InsertCommand
+import server.commands.PrintAscendingCommand
+import server.commands.RemoveGreaterCommand
+import server.commands.RemoveGreaterKeyCommand
+import server.commands.RemoveKeyCommand
+import server.commands.ReplaceIfGreaterCommand
+import server.commands.ShowCommand
+import server.commands.UpdateCommand
 
 fun main(args: Array<String>) {
     System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
+    val logger = LoggerFactory.getLogger("server.Main")
+
     if (args.isEmpty()) {
-        println("Ошибка: нужно передать имя файла")
+        logger.error("Ошибка: нужно передать имя файла")
         return
     }
 
@@ -17,12 +34,13 @@ fun main(args: Array<String>) {
 
     try {
         collectionManager.loadCollectionFromFile(fileManager)
-        println("Коллекция загружена: ${collectionManager.size()} элементов")
+        logger.info("Коллекция загружена: ${collectionManager.size()} элементов")
     } catch (e: Exception) {
-        println("Не удалось загрузить коллекцию: ${e.message}")
+        logger.error("Не удалось загрузить коллекцию: ${e.message}")
     }
 
     commandManager.addToList(HelpCommand(commandManager))
+    commandManager.addToList(SaveCommand(collectionManager))
     commandManager.addToList(InfoCommand(collectionManager))
     commandManager.addToList(ShowCommand(collectionManager))
     commandManager.addToList(ClearCommand(collectionManager))

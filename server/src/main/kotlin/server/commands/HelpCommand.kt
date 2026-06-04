@@ -1,8 +1,9 @@
-package common.commands
+package server.commands
 
 import server.CommandManager
 import common.Request
 import common.Response
+import common.commands.Command
 
 /**
  * Команда вывода справки.

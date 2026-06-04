@@ -1,8 +1,10 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
+
 /**
  * Команда вывода информации о коллекции.
  * Отображает тип коллекции, дату инициализации и количество элементов.

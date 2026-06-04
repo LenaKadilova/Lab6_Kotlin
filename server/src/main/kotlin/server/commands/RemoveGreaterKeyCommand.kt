@@ -1,8 +1,9 @@
-package common.commands
+package server.commands
 
 import server.CollectionManager
 import common.Request
 import common.Response
+import common.commands.Command
 
 class RemoveGreaterKeyCommand(private val collectionManager: CollectionManager) : Command {
 

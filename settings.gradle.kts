@@ -1,6 +1,7 @@
 pluginManagement {
     plugins {
-        kotlin("jvm") version "1.9.22"
+        kotlin("jvm") version "2.2.20"
     }
 }
-rootProject.name = "Lab5_Kotlin"
+rootProject.name = "Lab6_Kotlin"
+include("common", "client", "server")
