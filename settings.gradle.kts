@@ -1,6 +1,24 @@
 pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+
     plugins {
-        kotlin("jvm") version "1.9.22"
+        kotlin("jvm") version "2.2.20"
     }
 }
-rootProject.name = "Lab5_Kotlin"
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Lab6_Kotlin"
+
+include("common")
+include("client")
+include("server")
